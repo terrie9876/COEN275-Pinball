@@ -29,7 +29,7 @@ public class FrameManager extends JPanel implements ActionListener {
 		
 		this.screenSize = screenSize;
 		this.setBackground(Color.LIGHT_GRAY);
-		timer = new Timer(100,this);
+		timer = new Timer(50,this);
 		clockers = 0;
 		
 		populateLists();
@@ -66,9 +66,28 @@ public class FrameManager extends JPanel implements ActionListener {
 	}
 	
 	private void checkCollision(){
+		ArrayList<Thread> tList = new ArrayList<Thread>();
 		for(Block b: blocks){
-			b.collidedWith(ball);
+//			maybe we use this to show not multithreaded issues
+//			b.collidedWith(ball);
+//		}
+			CollisionRunnable cr = new CollisionRunnable(b,ball);
+			Thread t = new Thread(cr);
+			tList.add(t);
+			t.start();
 		}
+		
+	     for (Thread t : tList)
+	     {
+	         try
+	         {
+	            // Thread call here
+	        	 t.join();
+	         } catch ( InterruptedException e )
+	         {
+	             e.printStackTrace();
+	         }
+	     }
 	}
 	
 	private void populateLists(){
