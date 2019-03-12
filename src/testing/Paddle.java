@@ -15,7 +15,7 @@ public class Paddle extends Block {
 		this.maxAngle = maxAngle;
 		
 		this.isLeft = isLeft;
-		this.angleInterval = 5;
+		this.angleInterval = 10;
 		
 	}
 
@@ -33,16 +33,7 @@ public class Paddle extends Block {
 		
 	}
 	
-	@Override
-	public Vector2d whichSide(Point p) {
-//		if(isLeft){
-//			return tangentUp;
-//		}
-//		else{
-//			return tangentLeft;
-//		}
-		return super.whichSide(p);
-	}
+
 	
 	
 

@@ -69,7 +69,7 @@ public class Ball extends Actor {
 		tangent.scale(scaleFactor);
 		Vector2d newSpd = (tangent.subtract(spd)).inverse();
 		newSpd.normalize();
-		System.out.println("Old Spd: "+spd.toString() + " New Spd: "+newSpd.toString() + " Tangent: " + tangent.toString());
+		//System.out.println("Old Spd: "+spd.toString() + " New Spd: "+newSpd.toString() + " Tangent: " + tangent.toString());
 		
 		newSpd.scale(spdValue);
 		spd = newSpd;

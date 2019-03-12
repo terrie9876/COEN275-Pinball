@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 
 
-/*        (Top if angle=0)
+/*        		(Top if angle=0)
  *              ______________
  *              |            |  
- *              |            |   (Top if angle=90)
+ *              |            |   Right
  * 	            |            |
  *              --------------
  */  
@@ -36,6 +36,9 @@ public class Block extends Actor {
 		
 	}
 
+	//Function: getCorner(bool,bool)
+	//Purpose: To return a given corner based on the boolean values.
+	//Note: This method is mainly used when designing the board, as it's much easier to align blocks together by their corners
 	public Point getCorner(boolean isTop, boolean isRight){
 		if(isTop){
 			if(isRight)
@@ -51,27 +54,37 @@ public class Block extends Actor {
 		}
 	}
 	
+	
+	//Function setCorners()
+	//Purpose: To set up all of the initial variables including the points representing the 4 corners, and the upward facing tangent
+	//Notes: I made this a method because when Paddle extends this class, I need a way to recalculate all of the corners and the tangents as it rotates
 	public void setCorners(){
-		corTL = new Point((int)pos.getX(),(int)pos.getY());
-		corTR = new Point((int)(corTL.getX() + width * Math.cos(Math.toRadians(angle))),(int)(corTL.getY() + width * Math.sin(Math.toRadians(angle))));
-		corBL = new Point((int)(corTL.getX() - height * Math.sin(Math.toRadians(angle))),(int)(corTL.getY() + height * Math.cos(Math.toRadians(angle))));
-		
+		//Calculating differences for the Corner calulations
 		int delX = (int)(width*Math.cos(Math.toRadians(angle)) - height*Math.sin(Math.toRadians(angle)));
 		int delY = (int)(width*Math.sin(Math.toRadians(angle)) + height*Math.cos(Math.toRadians(angle)));
 		
+		//setting up corners and center
+		corTL = new Point((int)pos.getX(),(int)pos.getY());
+		corTR = new Point((int)(corTL.getX() + width * Math.cos(Math.toRadians(angle))),(int)(corTL.getY() + width * Math.sin(Math.toRadians(angle))));
+		corBL = new Point((int)(corTL.getX() - height * Math.sin(Math.toRadians(angle))),(int)(corTL.getY() + height * Math.cos(Math.toRadians(angle))));
 		corBR = new Point((int)pos.getX() + delX, (int)pos.getY() + delY);
 		center = new Point((int)pos.getX() + delX/2, (int)pos.getY() + delY/2);
 		
+		//making Vector2d that contains direction from center to listed corner
 		toTL = new Vector2d(center,corTL);
 		toTR = new Vector2d(center,corTR);
 		
+		//Making tangents
 		tangentUp = new Vector2d(Math.cos(Math.toRadians((angle - 90))),Math.sin(Math.toRadians(angle - 90)));
-		tangentLeft = tangentUp.rotate(-90);//getCCWVec();
+		tangentLeft = tangentUp.rotate(-90);
 		
+		//Only care about direction of tangents
 		tangentUp.normalize();
 		tangentLeft.normalize();
 	}
 	
+	//Function: whichSide(Point)
+	//Purpose: To figure out which of the four sides a point is closest to, specifically the center of the ball
 	public Vector2d whichSide(Point p){
 		boolean isUR = checkBoundary(p,center,toTL.rotate(-90),toTL.getX() < 0,toTL.getY()<0);
 		boolean isUL = checkBoundary(p,center,toTR.rotate(-90),toTR.getX() > 0,toTR.getY()>0);
@@ -80,18 +93,16 @@ public class Block extends Actor {
 		return tangentUp.rotate(90 * whichOne);
 	}
 	
+	//Function: collidedWith(Ball)
+	//Purpose: To see if the given ball has collided with the Block or not
+	//Note: This is the method that gets called from FrameManager to initiate collision detection
 	public void collidedWith(Ball ball){
-		int numPoints = 30;
+		int numPoints = 30;//number of points around the ball to check
 		ArrayList<Point> ptChecks = ball.getPointBySlope(tangentUp.inverse(),numPoints);
-		//Right,Down,Left,Up
-		
-		//if ball at 40,30 at TL corner is at 35,25
-		Vector2d currTan = this.whichSide( new Point((int)ball.getPos().getX(),(int)ball.getPos().getY()));
-		
-		
+		Vector2d currTan = this.whichSide(new Point((int)ball.getPos().getX(),(int)ball.getPos().getY()));
 		
 		for(Point p : ptChecks){
-			if(isInRectangle(p,currTan)){
+			if(isInRectangle(p)){
 				ball.alterSpeed(currTan);
 				break;
 			}
@@ -99,18 +110,18 @@ public class Block extends Actor {
 		
 	}
 	
-	public boolean isInRectangle(Point p, Vector2d tangent){
+	//Function: isInRectangle(Point)
+	//Purpose: Returns true if a given point lies within a Rectangle, false otherwise
+	public boolean isInRectangle(Point p){
+		Vector2d tangent = new Vector2d(tangentUp.getX(),tangentUp.getY());
 		for(int x = 0; x < 4; x++){
-			//System.out.println("ISInRectangle: " + tangent.toString());
-			//if we are looking at what we've marked as the Up or Left side of the rectangle
 			if(tangent.equals(tangentUp)||tangent.equals(tangentLeft)){
-				//System.out.println("Checking left or top side");
+				//checking upward or left facing side
 				if(!checkBoundary(p,corTL,tangent,tangent.getY() > 0,tangent.getX() < 0))
 					return false;
 			}
 			else{
-				//System.out.println("Checking right or bottom side");
-				//this else statement checks right and down facing side
+				//checking right and down facing side
 				if(!checkBoundary(p,corBR,tangent,tangent.getY() > 0,tangent.getX() < 0))
 					return false;
 				
@@ -121,13 +132,15 @@ public class Block extends Actor {
 		return true;
 	}
 	
+	//Function: checkBoundary(Point,Point,Vector2d,bool,bool)
+	//Purpose: Returns true depending on the relationship between the two Points relative to the slope and the two bool values
 	public boolean checkBoundary(Point check, Point inLine, Vector2d tangent, boolean isDown, boolean isLeft){
-		Vector2d slope = tangent.rotate(90);//getCWVec();
+		Vector2d slope = tangent.rotate(90);//slope is perpendicular to the tangent
 		
 		//if the side is sufficiently vertical
 		if(Math.abs(slope.getX()) <= 1e-8){
 			return isLeft == (check.getX() > inLine.getX());
-//			ANother way to look at this return statement			
+//			Another way to look at this return statement			
 //			if(toLeft)
 //				return check.getX() > inLine.getX();
 //			else

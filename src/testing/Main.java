@@ -21,6 +21,8 @@ public class Main {
 		
 		frame.add(fm);
 		frame.setVisible(true); // display frame
+		frame.pack();
+		fm.requestFocusInWindow();
 	}
 
 }

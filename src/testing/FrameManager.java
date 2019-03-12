@@ -7,17 +7,21 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class FrameManager extends JPanel implements ActionListener {
+public class FrameManager extends JPanel implements ActionListener{
 
 	private ArrayList<Actor> actors;//List of all actors for easier repainting
 	private ArrayList<Block> blocks;//list of blocks for collision detection looping
 	private Paddle paddleLeft,paddleRight;
+	private boolean play;
 	private int clockers;
+	
+	private KeyManager kManager;
 	
 	private Ball ball;
 	
@@ -29,8 +33,12 @@ public class FrameManager extends JPanel implements ActionListener {
 		
 		this.screenSize = screenSize;
 		this.setBackground(Color.LIGHT_GRAY);
+		
 		timer = new Timer(50,this);
 		clockers = 0;
+		kManager = new KeyManager();
+		
+		addKeyListener(kManager);
 		
 		populateLists();
 		
@@ -59,8 +67,8 @@ public class FrameManager extends JPanel implements ActionListener {
 	}
 	
 	private void rotatePaddles(){
-		paddleLeft.rotatePaddle(clockers>16);
-		paddleRight.rotatePaddle(clockers<16);
+		paddleLeft.rotatePaddle(kManager.isLeft());
+		paddleRight.rotatePaddle(kManager.isRight());
 		clockers++;
 		clockers%=32;
 	}

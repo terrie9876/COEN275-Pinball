@@ -3,7 +3,7 @@ package testing;
 import java.awt.Point;
 
 //Helper class for manipulating values in a 2d environment
-public class Vector2d {
+public class Vector2d implements Cloneable{
 	private double x,y;
 	
 	public Vector2d(double x, double y){
@@ -15,7 +15,7 @@ public class Vector2d {
 		this.x = head.getX() - tail.getX();
 		this.y = head.getY() - tail.getY();
 	}
-
+	
 	public double getLength(){
 		Double sum = Math.pow(x, 2) + Math.pow(y,2);
 		return Math.pow(sum, .5);
