@@ -51,7 +51,6 @@ public class Vector2d {
 		return new Vector2d(this.x - delX, this.y - delY);
 	}
 
-	// returns vector2d pointing in opposite direction of this vector 2d
 	public Vector2d inverse() {
 		return new Vector2d(-this.x, -this.y);
 	}

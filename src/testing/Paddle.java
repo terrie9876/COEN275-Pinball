@@ -7,8 +7,8 @@ public class Paddle extends Block {
 	boolean isLeft;
 	double angleInterval;
 
-	public Paddle(double x, double y, Color color, int width, int height, double angle, double minAngle, double maxAngle, boolean isLeft) {
-		super(x, y, color, width, height, angle);
+	public Paddle(double x, double y, Color color, int width, int height, double angle, double bounceFactor, double minAngle, double maxAngle, boolean isLeft) {
+		super(x, y, color, width, height, angle, bounceFactor);
 		
 		this.minAngle = minAngle;
 		this.maxAngle = maxAngle;

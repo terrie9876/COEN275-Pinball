@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Ball extends Actor {
-	private int gravity = 1;
+	private double gravity = 1;
 	private int maxSpeed = 20;
 	private int radius, score;
 	private Vector2d spd;
@@ -65,12 +65,13 @@ public class Ball extends Actor {
 	//Function: alterSpeed(Vector2d)
 	//Purpose: To change the speed of the ball based on the tangent of the surface that it has collided with
 	//Note: We increase score here because this method is only called when collision detection occurs
-	public void alterSpeed(Vector2d tangent){
+	public void alterSpeed(Vector2d tangent, double bounceFactor){
 		tangent.normalize();//only care about the direction of reflection
 		for(int x = 0; x < 5 ; x++)
 			pos = pos.add(tangent);//we want to push the ball away from the block in hopes of not getting stuck in the block
 		
-		double spdValue = spd.getLength();
+		double spdValue = spd.getLength() * bounceFactor;
+		
 		if(spdValue > (double)maxSpeed) //Limiting the max speed of the ball
 			spdValue = maxSpeed;
 		spd.normalize();

@@ -20,13 +20,13 @@ public class Block extends Actor {
 	protected Point corTL,corBR,center,corTR,corBL; // the last two are just for convenience
 	protected double boundingW, boundingH;
 	public Vector2d tangentUp,tangentLeft, toTL, toTR;
-	protected double angle;
-	public Block(double x, double y,Color color, int width,  int height, double angle) {
+	protected double angle,bounceFactor;
+	public Block(double x, double y,Color color, int width,  int height, double angle, double bounceFactor) {
 		super(x, y, color);
 		this.width = width;
 		this.height = height;
 		this.angle = angle;
-		
+		this.bounceFactor = bounceFactor;
 		
 		setCorners();
 		
@@ -99,7 +99,7 @@ public class Block extends Actor {
 
 		for (Point p : ptChecks) {
 			if (isInRectangle(p)) {
-				ball.alterSpeed(currTan);
+				ball.alterSpeed(currTan,bounceFactor);
 				return;
 			}
 		}

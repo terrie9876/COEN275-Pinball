@@ -31,7 +31,7 @@ public class FrameManager extends JPanel implements ActionListener {
 	public FrameManager(Dimension screenSize) {
 
 		this.screenSize = screenSize;
-		this.setBackground(Color.LIGHT_GRAY);
+		
 
 		timer = new Timer(45, this);
 		kManager = new KeyManager();
@@ -69,10 +69,11 @@ public class FrameManager extends JPanel implements ActionListener {
 	}
 	
 	private void gameOver(Graphics g){
+		this.setBackground(Color.BLACK);
 		g.setFont(new Font(g.getFont().getFontName(),Font.BOLD,32));
-		g.setColor(Color.RED.darker());
+		g.setColor(Color.RED);
 		g.drawString("The ball fell. That's Game Over!", screenSize.width/2-300, screenSize.height/2-100);
-		g.setColor(Color.BLACK);
+		g.setColor(Color.WHITE);
 		g.setFont(new Font(g.getFont().getFontName(),Font.ITALIC,24));
 		g.drawString("Number of times the ball bounced: " + Integer.toString(ball.getScore()), screenSize.width/2-250, screenSize.height/2);
 		g.drawString("Press \"Space\" to go on another jank adventure", screenSize.width/2-250, screenSize.height/2+100);
@@ -81,9 +82,11 @@ public class FrameManager extends JPanel implements ActionListener {
 			play = true;
 			gameOver = false;
 		}
+		g.setColor(Color.BLACK);
 	}
 	
 	private void mainMenu(Graphics g){
+		this.setBackground(Color.WHITE);
 		g.setFont(new Font(g.getFont().getFontName(),Font.BOLD,32));
 		g.drawString("Welcome to JankBall", screenSize.width/2-175, screenSize.height/2-100);
 		g.setFont(new Font(g.getFont().getFontName(),Font.ITALIC,24));
@@ -96,6 +99,7 @@ public class FrameManager extends JPanel implements ActionListener {
 	}
 	
 	private void playGame(Graphics g){
+		this.setBackground(Color.LIGHT_GRAY);
 		for (Actor a : actors) {
 			a.draw(g);
 		}
@@ -146,23 +150,24 @@ public class FrameManager extends JPanel implements ActionListener {
 		double middleScreen = screenSize.getWidth() / 2;
 		System.out.println(middleScreen);
 
-		Block ceiling = new Block(0, 0, Color.BLACK, 1100, 140, 0);
-		Block wallLeft = new Block(0, 0, new Color(0, 127, 0), 150, 1100, 0);
-		Block wallRight = new Block(screenSize.getWidth() - 150, 0, new Color(0, 127, 0), 150, 1100, 0);
+		//Block( xPos, yPos, color, width, height, angle)
+		Block ceiling = new Block(0, 0, Color.BLACK, 1100, 140, 0,1);
+		Block wallLeft = new Block(0, 0, new Color(0, 127, 0), 150, 1100, 0,1);
+		Block wallRight = new Block(screenSize.getWidth() - 150, 0, new Color(0, 127, 0), 150, 1100, 0,1);
 
-		Block inclineLeft = new Block(125, 400, new Color(0, 127, 0), 250, 60, 40);
+		Block inclineLeft = new Block(125, 400, new Color(0, 127, 0), 250, 60, 40,.8);
 		p = inclineLeft.getCorner(true, true);
-		Block cliffLeft = new Block(p.getX() - 60, p.getY(), new Color(0, 127, 0), 60, 300, 0);
-		paddleLeft = new Paddle(p.getX() - 10, p.getY(), new Color(127, 127, 0), 80, 30, 20, -40, 20, true);
+		Block cliffLeft = new Block(p.getX() - 60, p.getY(), new Color(0, 127, 0), 60, 300, 0,.8);
+		paddleLeft = new Paddle(p.getX() - 10, p.getY(), new Color(127, 127, 0), 80, 30, 20, 1.5, -40, 20, true);
 
 		p = new Point((int) (2 * middleScreen - p.getX()), (int) p.getY());
-		Block inclineRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 250, 60, -40);
-		Block cliffRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 60, 300, 0);
-		paddleRight = new Paddle(p.getX() + 10, p.getY(), new Color(127, 127, 0), 30, 80, 70, 70, 130, false);
+		Block inclineRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 250, 60, -40,.8);
+		Block cliffRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 60, 300, 0,.8);
+		paddleRight = new Paddle(p.getX() + 10, p.getY(), new Color(127, 127, 0), 30, 80, 70,1.5, 70, 130, false);
 
-		Block b1 = new Block((int) middleScreen - 90, 250, Color.RED, 60, 60, 20);
-		Block b2 = new Block((int) middleScreen + 30, 250, Color.RED, 60, 60, -20);
-		Block b3 = new Block((int) middleScreen, 350, Color.RED, 60, 60, 40);
+		Block b1 = new Block((int) middleScreen - 90, 250, Color.RED, 60, 60, 20,.9);
+		Block b2 = new Block((int) middleScreen + 30, 250, Color.RED, 60, 60, -20,.9);
+		Block b3 = new Block((int) middleScreen, 350, Color.RED, 60, 60, 40,.9);
 
 		blocks.add(wallLeft);
 		blocks.add(wallRight);
