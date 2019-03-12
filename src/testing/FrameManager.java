@@ -2,11 +2,13 @@ package testing;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -16,7 +18,7 @@ public class FrameManager extends JPanel implements ActionListener {
 	private ArrayList<Actor> actors;// List of all actors for easier repainting
 	private ArrayList<Block> blocks;// list of blocks for collision detection looping
 	private Paddle paddleLeft, paddleRight;
-	private boolean play;
+	private boolean play,gameOver;
 
 	private KeyManager kManager;
 
@@ -31,41 +33,23 @@ public class FrameManager extends JPanel implements ActionListener {
 		this.screenSize = screenSize;
 		this.setBackground(Color.LIGHT_GRAY);
 
-		timer = new Timer(40, this);
+		timer = new Timer(45, this);
 		kManager = new KeyManager();
+		play = false;
+		gameOver = false;
+		
 
 		addKeyListener(kManager);
-
-		populateLists();
 
 		timer.start();
 
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		checkCollision();
-		rotatePaddles();
-		repaint();
-
-	}
-
-	@Override
-	protected void paintComponent(Graphics arg0) {
-		// TODO Auto-generated method stub
-		super.paintComponent(arg0);
-		for (Actor a : actors) {
-			a.draw(arg0);
-		}
-
-	}
-
+	
 	private void rotatePaddles() {
 		paddleLeft.rotate(kManager.isLeft());
 		paddleRight.rotate(kManager.isRight());
 	}
-
+	
 	private void checkCollision() {
 		ArrayList<Thread> tList = new ArrayList<Thread>();
 		for (Block b : blocks) {
@@ -83,13 +67,81 @@ public class FrameManager extends JPanel implements ActionListener {
 			}
 		}
 	}
+	
+	private void gameOver(Graphics g){
+		g.setFont(new Font(g.getFont().getFontName(),Font.BOLD,32));
+		g.setColor(Color.RED.darker());
+		g.drawString("The ball fell. That's Game Over!", screenSize.width/2-300, screenSize.height/2-100);
+		g.setColor(Color.BLACK);
+		g.setFont(new Font(g.getFont().getFontName(),Font.ITALIC,24));
+		g.drawString("Number of times the ball bounced: " + Integer.toString(ball.getScore()), screenSize.width/2-250, screenSize.height/2);
+		g.drawString("Press \"Space\" to go on another jank adventure", screenSize.width/2-250, screenSize.height/2+100);
+		if(kManager.isStart()){
+			populateLists();
+			play = true;
+			gameOver = false;
+		}
+	}
+	
+	private void mainMenu(Graphics g){
+		g.setFont(new Font(g.getFont().getFontName(),Font.BOLD,32));
+		g.drawString("Welcome to JankBall", screenSize.width/2-175, screenSize.height/2-100);
+		g.setFont(new Font(g.getFont().getFontName(),Font.ITALIC,24));
+		g.drawString("Press \"Space\" to begin a jank adventure", screenSize.width/2-250, screenSize.height/2);
+		if(kManager.isStart()){
+			populateLists();
+			play = true;
+		}
+		
+	}
+	
+	private void playGame(Graphics g){
+		for (Actor a : actors) {
+			a.draw(g);
+		}
+		if(ball.getY() > screenSize.getHeight()-50){
+			gameOver = true;
+			play = false;
+		}
+	}
+	
+	@Override
+	protected void paintComponent(Graphics arg0) {
 
+		super.paintComponent(arg0);
+		if(play)
+			playGame(arg0);
+		else{
+			if(gameOver){
+				gameOver(arg0);
+			}
+			else{
+				mainMenu(arg0);
+			}
+		}
+
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		if(play){
+			checkCollision();
+			rotatePaddles();
+		}
+		repaint();
+
+	}
+
+//	Function: populateList()
+//	Purpose: Makes all the actors for the pinball board. Useful for resetting the situation
 	private void populateLists() {
 		blocks = new ArrayList<Block>();
 		actors = new ArrayList<Actor>();
 		Point p;
 
-		ball = new Ball(300, 250, Color.BLACK, 10, 7, 7, screenSize);
+		Random rand = new Random();
+		ball = new Ball(300, 250, Color.RED.darker(), 10, rand.nextDouble()*14-7, rand.nextDouble()*14-7, screenSize);
 
 		double middleScreen = screenSize.getWidth() / 2;
 		System.out.println(middleScreen);
@@ -110,6 +162,7 @@ public class FrameManager extends JPanel implements ActionListener {
 
 		Block b1 = new Block((int) middleScreen - 90, 250, Color.RED, 60, 60, 20);
 		Block b2 = new Block((int) middleScreen + 30, 250, Color.RED, 60, 60, -20);
+		Block b3 = new Block((int) middleScreen, 350, Color.RED, 60, 60, 40);
 
 		blocks.add(wallLeft);
 		blocks.add(wallRight);
@@ -122,6 +175,7 @@ public class FrameManager extends JPanel implements ActionListener {
 		blocks.add(paddleRight);
 		blocks.add(b1);
 		blocks.add(b2);
+		blocks.add(b3);
 
 		actors.add(wallLeft);
 		actors.add(wallRight);
@@ -134,6 +188,7 @@ public class FrameManager extends JPanel implements ActionListener {
 		actors.add(paddleRight);
 		actors.add(b1);
 		actors.add(b2);
+		actors.add(b3);
 		actors.add(ball);
 
 	}

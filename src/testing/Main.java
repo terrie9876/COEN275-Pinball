@@ -4,6 +4,7 @@ package testing;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 public class Main {
 
@@ -20,7 +21,15 @@ public class Main {
 		frame.add(fm);
 		frame.setVisible(true); // display frame
 		frame.pack();
-		fm.requestFocusInWindow();
+		SwingUtilities.invokeLater(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				fm.requestFocusInWindow();
+			}
+			
+		});
 	}
 
 }

@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 public class Ball extends Actor {
 	private int gravity = 1;
-	protected int radius;
-	Vector2d spd;
-	Dimension screen;//used to determine screen boundaries
-	public Ball(double x, double y,Color color,int r, int sx, int sy, Dimension size){
+	private int maxSpeed = 20;
+	private int radius, score;
+	private Vector2d spd;
+	private Dimension screen;//used to determine screen boundaries
+	public Ball(double x, double y,Color color,int r, double sx, double sy, Dimension size){
 		super(x,y,color);
 		
+		score = 0;
 		radius = r;
 		spd = new Vector2d(sx,sy);
 		screen = size;
@@ -26,7 +28,7 @@ public class Ball extends Actor {
 		pos = pos.add(spd);
 		
 		//Limiting the speed of the ball
-		if(spd.getLength() < 25 || spd.getY()<0)
+		if(spd.getLength() < (double)maxSpeed || spd.getY()<0)
 			spd = spd.add(0,gravity);
 		
 		g.fillOval((int)pos.getX() - radius, (int)pos.getY() - radius, radius * 2, radius * 2);
@@ -56,16 +58,21 @@ public class Ball extends Actor {
 		return new Vector2d(spd.getX(),spd.getY());
 	}
 	
+	public int getScore(){
+		return score;
+	}
+	
 	//Function: alterSpeed(Vector2d)
 	//Purpose: To change the speed of the ball based on the tangent of the surface that it has collided with
+	//Note: We increase score here because this method is only called when collision detection occurs
 	public void alterSpeed(Vector2d tangent){
 		tangent.normalize();//only care about the direction of reflection
 		for(int x = 0; x < 5 ; x++)
 			pos = pos.add(tangent);//we want to push the ball away from the block in hopes of not getting stuck in the block
 		
 		double spdValue = spd.getLength();
-		if(spdValue > 25) //Limiting the max speed of the ball
-			spdValue = 25;
+		if(spdValue > (double)maxSpeed) //Limiting the max speed of the ball
+			spdValue = maxSpeed;
 		spd.normalize();
 		
 		double scaleFactor = 2 * spd.dot(tangent);
@@ -77,6 +84,8 @@ public class Ball extends Actor {
 		newSpd.scale(spdValue);
 		spd = newSpd;
 		
+		score++;
+		System.out.println(score);
 		
 	}
 	
