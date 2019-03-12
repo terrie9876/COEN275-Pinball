@@ -1,7 +1,6 @@
 package testing;
 
 import java.awt.Color;
-import java.awt.Point;
 
 public class Paddle extends Block {
 	double minAngle, maxAngle;
@@ -15,11 +14,11 @@ public class Paddle extends Block {
 		this.maxAngle = maxAngle;
 		
 		this.isLeft = isLeft;
-		this.angleInterval = 10;
+		this.angleInterval = 5;
 		
 	}
 
-	public void rotatePaddle(boolean way){
+	public void rotate(boolean way){
 		int negative = way? 1:-1;
 		
 		angle += negative * angleInterval;

@@ -25,15 +25,17 @@ public class Ball extends Actor {
 		
 		pos = pos.add(spd);
 		
+		//Limiting the speed of the ball
 		if(spd.getLength() < 25 || spd.getY()<0)
 			spd = spd.add(0,gravity);
+		
 		g.fillOval((int)pos.getX() - radius, (int)pos.getY() - radius, radius * 2, radius * 2);
 
 	}
 	
-	//Precondition: slope is not null, howMany is positive
-	//Postcondition: Returns an ArrayList<Point> where the points are the points on the ball used to check collision with regards to the sides in the following order
-	//Right,Down,Left,Up
+	//Function: getPointBySlope(Vector2d,howMany)
+	//Purpose: Returns an ArrayList of Points that are on the edge of the ball. The first point will always be in the direction of slope
+	//Note: I used slope so that the first point in the list will always be the one closest to the block that calls this function
 	public ArrayList<Point> getPointBySlope(Vector2d slope, int howMany){
 		ArrayList<Point> ans = new ArrayList<Point>();
 		double angle = 360./(double)howMany;
@@ -54,14 +56,15 @@ public class Ball extends Actor {
 		return new Vector2d(spd.getX(),spd.getY());
 	}
 	
-	
+	//Function: alterSpeed(Vector2d)
+	//Purpose: To change the speed of the ball based on the tangent of the surface that it has collided with
 	public void alterSpeed(Vector2d tangent){
 		tangent.normalize();//only care about the direction of reflection
 		for(int x = 0; x < 5 ; x++)
 			pos = pos.add(tangent);//we want to push the ball away from the block in hopes of not getting stuck in the block
 		
 		double spdValue = spd.getLength();
-		if(spdValue > 25)
+		if(spdValue > 25) //Limiting the max speed of the ball
 			spdValue = 25;
 		spd.normalize();
 		

@@ -1,8 +1,6 @@
 package testing;
 
-import javax.swing.Timer;
 
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
