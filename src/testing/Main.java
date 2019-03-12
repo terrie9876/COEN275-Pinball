@@ -1,4 +1,4 @@
-package project.last.testing;
+package testing;
 
 import javax.swing.Timer;
 
@@ -16,7 +16,7 @@ public class Main {
 		FrameManager fm = new FrameManager(size);
 		
 		frame.setBounds(0,0,(int)size.getWidth(),(int)size.getHeight());
-		frame.setSize(size);
+		frame.setMinimumSize(size);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		frame.add(fm);

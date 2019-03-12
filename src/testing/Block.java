@@ -1,4 +1,4 @@
-package project.last.testing;
+package testing;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,7 +20,7 @@ import javax.swing.Timer;
 
 public class Block extends Actor {
 	protected int width, height;
-	protected Point corTL,corBR,center;
+	protected Point corTL,corBR,center,corTR,corBL; // the last two are just for convenience
 	protected double boundingW, boundingH;
 	public Vector2d tangentUp,tangentLeft, toTL, toTR;
 	protected double angle;
@@ -36,9 +36,25 @@ public class Block extends Actor {
 		
 	}
 
+	public Point getCorner(boolean isTop, boolean isRight){
+		if(isTop){
+			if(isRight)
+				return corTR;
+			else
+				return corTL;
+		}
+		else{
+			if(isRight)
+				return corBR;
+			else
+				return corBL;
+		}
+	}
+	
 	public void setCorners(){
 		corTL = new Point((int)pos.getX(),(int)pos.getY());
-		Point corTR = new Point((int)(corTL.getX() + width * Math.cos(Math.toRadians(angle))),(int)(corTL.getY() + width * Math.sin(Math.toRadians(angle))));
+		corTR = new Point((int)(corTL.getX() + width * Math.cos(Math.toRadians(angle))),(int)(corTL.getY() + width * Math.sin(Math.toRadians(angle))));
+		corBL = new Point((int)(corTL.getX() - height * Math.sin(Math.toRadians(angle))),(int)(corTL.getY() + height * Math.cos(Math.toRadians(angle))));
 		
 		int delX = (int)(width*Math.cos(Math.toRadians(angle)) - height*Math.sin(Math.toRadians(angle)));
 		int delY = (int)(width*Math.sin(Math.toRadians(angle)) + height*Math.cos(Math.toRadians(angle)));
@@ -51,6 +67,17 @@ public class Block extends Actor {
 		
 		tangentUp = new Vector2d(Math.cos(Math.toRadians((angle - 90))),Math.sin(Math.toRadians(angle - 90)));
 		tangentLeft = tangentUp.rotate(-90);//getCCWVec();
+		
+		tangentUp.normalize();
+		tangentLeft.normalize();
+	}
+	
+	public Vector2d whichSide(Point p){
+		boolean isUR = checkBoundary(p,center,toTL.rotate(-90),toTL.getX() < 0,toTL.getY()<0);
+		boolean isUL = checkBoundary(p,center,toTR.rotate(-90),toTR.getX() > 0,toTR.getY()>0);
+		
+		int whichOne = 2 * (isUR?0:1) + ((isUL == isUR)?0:1);
+		return tangentUp.rotate(90 * whichOne);
 	}
 	
 	public void collidedWith(Ball ball){
@@ -59,23 +86,12 @@ public class Block extends Actor {
 		//Right,Down,Left,Up
 		
 		//if ball at 40,30 at TL corner is at 35,25
-		Vector2d currTan,toBlock = (new Vector2d(center.getX(),center.getY())).subtract(ball.getPos());//getCWVec();//tangentRight
-		toBlock.normalize();
+		Vector2d currTan = this.whichSide( new Point((int)ball.getPos().getX(),(int)ball.getPos().getY()));
 		
-
 		
-		Point ballCenterAsPoint = new Point((int)ball.getPos().getX(),(int)ball.getPos().getY());
-		
-		boolean isUR = checkBoundary(ballCenterAsPoint,center,toTL.rotate(-90),toTL.getX() < 0,toTL.getY()<0);
-		boolean isUL = checkBoundary(ballCenterAsPoint,center,toTR.rotate(-90),toTR.getX() > 0,toTR.getY()>0);
-		//System.out.println(isUR + " " + isUL);
-		
-		int whichOne = 2 * (isUR?0:1) + ((isUL == isUR)?0:1);
-		currTan = tangentUp.rotate(90 * whichOne);
 		
 		for(Point p : ptChecks){
 			if(isInRectangle(p,currTan)){
-				System.out.println(isUR + " " + isUL + " " + whichOne);
 				ball.alterSpeed(currTan);
 				break;
 			}
@@ -110,7 +126,6 @@ public class Block extends Actor {
 		
 		//if the side is sufficiently vertical
 		if(Math.abs(slope.getX()) <= 1e-8){
-			//System.out.println("The Flag toLeft: " + toLeft + " The Tangent: "+tangent.toString() + "The Point: " + check.toString() + " The inLine: " + inLine.toString());
 			return isLeft == (check.getX() > inLine.getX());
 //			ANother way to look at this return statement			
 //			if(toLeft)
@@ -122,8 +137,6 @@ public class Block extends Actor {
 		//from point slope formula, y-y1 = m(x-x1) where (x,y) is from check and (x1,y1) are from inLine
 		//y_pred = (slope.y/slope.x)(check.x - inLine.x) + inLine.y
 		int y_pred = (int)((slope.getY()/(double)slope.getX())*(check.getX() - inLine.getX()) + inLine.getY());
-		//System.out.println("The Point: " + check.toString() + " Predicted: " + Integer.toString(y_pred) + "The Tangent: " + tangent.toString() + " THe Flag: " + toDown + " The Check:" + (check.getY() < y_pred));
-		//System.out.println(toDown);
 		//same as the above return statement
 		return isDown == (check.getY() < y_pred);
 	}

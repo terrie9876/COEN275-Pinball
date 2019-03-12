@@ -1,8 +1,6 @@
-package project.last.testing;
+package testing;
 
 import java.awt.Point;
-
-import assignments.assign02.SpecialDay;
 
 //Helper class for manipulating values in a 2d environment
 public class Vector2d {

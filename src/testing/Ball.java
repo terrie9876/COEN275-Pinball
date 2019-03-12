@@ -1,4 +1,4 @@
-package project.last.testing;
+package testing;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,7 +25,8 @@ public class Ball extends Actor {
 		
 		pos = pos.add(spd);
 		
-		spd = spd.add(0,gravity);
+		if(spd.getLength() < 25 || spd.getY()<0)
+			spd = spd.add(0,gravity);
 		g.fillOval((int)pos.getX() - radius, (int)pos.getY() - radius, radius * 2, radius * 2);
 
 	}
@@ -56,7 +57,12 @@ public class Ball extends Actor {
 	
 	public void alterSpeed(Vector2d tangent){
 		tangent.normalize();//only care about the direction of reflection
+		for(int x = 0; x < 5 ; x++)
+			pos = pos.add(tangent);//we want to push the ball away from the block in hopes of not getting stuck in the block
+		
 		double spdValue = spd.getLength();
+		if(spdValue > 25)
+			spdValue = 25;
 		spd.normalize();
 		
 		double scaleFactor = 2 * spd.dot(tangent);
@@ -64,10 +70,6 @@ public class Ball extends Actor {
 		Vector2d newSpd = (tangent.subtract(spd)).inverse();
 		newSpd.normalize();
 		System.out.println("Old Spd: "+spd.toString() + " New Spd: "+newSpd.toString() + " Tangent: " + tangent.toString());
-		
-		for(int x = 0; x < 5; x++){
-			pos = pos.add(newSpd);
-		}
 		
 		newSpd.scale(spdValue);
 		spd = newSpd;

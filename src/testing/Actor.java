@@ -1,10 +1,7 @@
-package project.last.testing;
+package testing;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JPanel;
 
 public abstract class Actor{
 	protected Vector2d pos;//x and y have to be ints for the coordinate system
