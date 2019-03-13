@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 public class Block extends Actor {
 	protected int width, height;
-	protected Point corTL,corBR,center,corTR,corBL; // the last two are just for convenience
-	protected double boundingW, boundingH;
-	public Vector2d tangentUp,tangentLeft, toTL, toTR;
+	protected Point corTL,corBR,center;
+	protected Point corTR,corBL; // these are just to potentially help with level creation
+	protected Vector2d tangentUp,tangentLeft, toTL, toTR;
 	protected double angle,bounceFactor;
 	public Block(double x, double y,Color color, int width,  int height, double angle, double bounceFactor) {
 		super(x, y, color);
@@ -107,7 +107,7 @@ public class Block extends Actor {
 	
 //	Function: isInRectangle(Point)
 //	Purpose: Returns true if a given point lies within a Rectangle, false otherwise
-	public boolean isInRectangle(Point p){
+	private boolean isInRectangle(Point p){
 		Vector2d tangent = new Vector2d(tangentUp.getX(), tangentUp.getY());
 		for (int x = 0; x < 4; x++) {
 			if (tangent.equals(tangentUp) || tangent.equals(tangentLeft)) {
@@ -129,7 +129,7 @@ public class Block extends Actor {
 	
 //	Function: checkBoundary(Point,Point,Vector2d,bool,bool)
 //	Purpose: Returns true depending on the relationship between the two Points relative to the slope and the two bool values
-	public boolean checkBoundary(Point check, Point inLine, Vector2d tangent, boolean isDown, boolean isLeft){
+	private boolean checkBoundary(Point check, Point inLine, Vector2d tangent, boolean isDown, boolean isLeft){
 		Vector2d slope = tangent.rotate(90);// slope is perpendicular to the tangent
 
 		// if the side is sufficiently vertical

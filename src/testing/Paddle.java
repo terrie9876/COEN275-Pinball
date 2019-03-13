@@ -3,9 +3,9 @@ package testing;
 import java.awt.Color;
 
 public class Paddle extends Block {
-	double minAngle, maxAngle;
-	boolean isLeft;
-	double angleInterval;
+	protected double minAngle, maxAngle;
+	protected boolean isLeft;
+	protected double angleInterval;
 
 	public Paddle(double x, double y, Color color, int width, int height, double angle, double bounceFactor, double minAngle, double maxAngle, boolean isLeft) {
 		super(x, y, color, width, height, angle, bounceFactor);

@@ -4,8 +4,7 @@ import java.awt.event.*;
 
 public class KeyManager extends KeyAdapter implements KeyListener{
 
-	boolean setlock = false;
-	boolean rPaddle, lPaddle, gStart;
+	private boolean rPaddle, lPaddle, gStart;
 	
 	public KeyManager(){
 		System.out.println("Key manager made");

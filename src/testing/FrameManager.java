@@ -20,7 +20,7 @@ public class FrameManager extends JPanel implements ActionListener {
 	private Paddle paddleLeft, paddleRight;
 	private boolean play,gameOver;
 
-	private KeyManager kManager;
+	private final KeyManager kManager;
 
 	private Ball ball;
 
@@ -72,11 +72,11 @@ public class FrameManager extends JPanel implements ActionListener {
 		this.setBackground(Color.BLACK);
 		g.setFont(new Font(g.getFont().getFontName(),Font.BOLD,32));
 		g.setColor(Color.RED);
-		g.drawString("The ball fell. That's Game Over!", screenSize.width/2-300, screenSize.height/2-100);
+		g.drawString("The ball fell. That's Game Over!", screenSize.width/2-250, screenSize.height/2-100);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(g.getFont().getFontName(),Font.ITALIC,24));
-		g.drawString("Number of times the ball bounced: " + Integer.toString(ball.getScore()), screenSize.width/2-250, screenSize.height/2);
-		g.drawString("Press \"Space\" to go on another jank adventure", screenSize.width/2-250, screenSize.height/2+100);
+		g.drawString("Your Score: " + Integer.toString(ball.getScore()), screenSize.width/2-100, screenSize.height/2);
+		g.drawString("Press \"Space\" to try again!", screenSize.width/2-150, screenSize.height/2+100);
 		if(kManager.isStart()){
 			populateLists();
 			play = true;
@@ -88,9 +88,9 @@ public class FrameManager extends JPanel implements ActionListener {
 	private void mainMenu(Graphics g){
 		this.setBackground(Color.WHITE);
 		g.setFont(new Font(g.getFont().getFontName(),Font.BOLD,32));
-		g.drawString("Welcome to JankBall", screenSize.width/2-175, screenSize.height/2-100);
+		g.drawString("Welcome to PinBall", screenSize.width/2-175, screenSize.height/2-100);
 		g.setFont(new Font(g.getFont().getFontName(),Font.ITALIC,24));
-		g.drawString("Press \"Space\" to begin a jank adventure", screenSize.width/2-250, screenSize.height/2);
+		g.drawString("Press \"Space\" to let the ball drop", screenSize.width/2-200, screenSize.height/2);
 		if(kManager.isStart()){
 			populateLists();
 			play = true;
@@ -103,6 +103,10 @@ public class FrameManager extends JPanel implements ActionListener {
 		for (Actor a : actors) {
 			a.draw(g);
 		}
+		g.setColor(Color.WHITE);
+		g.setFont(new Font(g.getFont().getFontName(),Font.BOLD,32));
+		g.drawString("Score: " + Integer.toString(ball.getScore()), 10, 50);
+		g.setColor(Color.BLACK);
 		if(ball.getY() > screenSize.getHeight()-50){
 			gameOver = true;
 			play = false;
@@ -145,7 +149,7 @@ public class FrameManager extends JPanel implements ActionListener {
 		Point p;
 
 		Random rand = new Random();
-		ball = new Ball(300, 250, Color.RED.darker(), 10, rand.nextDouble()*14-7, rand.nextDouble()*14-7, screenSize);
+		ball = new Ball(275, 250, Color.RED.darker(), 10, rand.nextDouble()*20-10, rand.nextDouble()*20-10, screenSize);
 
 		double middleScreen = screenSize.getWidth() / 2;
 		System.out.println(middleScreen);
