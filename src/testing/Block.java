@@ -93,7 +93,7 @@ public class Block extends Actor {
 //	Purpose: To see if the given ball has collided with the Block or not
 //	Note: This is the method that gets called from FrameManager to initiate collision detection
 	public void collidedWith(Ball ball){
-		int numPoints = 30;// number of points around the ball to check
+		int numPoints = 8;// number of points around the ball to check
 		ArrayList<Point> ptChecks = ball.getPointBySlope(tangentUp.inverse(), numPoints);
 		Vector2d currTan = this.whichSide(new Point((int) ball.getPos().getX(), (int) ball.getPos().getY()));
 

@@ -8,42 +8,25 @@ public class Ball extends Actor {
 	private int maxSpeed = 20;
 	private int radius, score;
 	private Vector2d spd;
-	private Dimension screen;//used to determine screen boundaries
-	public Ball(double x, double y,Color color,int r, double sx, double sy, Dimension size){
+	
+	public Ball(double x, double y,Color color,int r, double sx, double sy){
 		super(x,y,color);
 		
 		score = 0;
 		radius = r;
 		spd = new Vector2d(sx,sy);
-		screen = size;
 		
 	}
-	@Override
-	public void draw(Graphics g) {
-		// TODO Auto-generated method stub
-		g.setColor(color);
-		
-		checkBoundary();
-		
-		pos = pos.add(spd);
-		
-		//Limiting the speed of the ball
-		if(spd.getLength() < (double)maxSpeed || spd.getY()<0)
-			spd = spd.add(0,gravity);
-		
-		g.fillOval((int)pos.getX() - radius, (int)pos.getY() - radius, radius * 2, radius * 2);
 
-	}
-	
 	//Function: getPointBySlope(Vector2d,howMany)
 	//Purpose: Returns an ArrayList of Points that are on the edge of the ball. The first point will always be in the direction of slope
 	//Note: I used slope so that the first point in the list will always be the one closest to the block that calls this function
 	public ArrayList<Point> getPointBySlope(Vector2d slope, int howMany){
 		ArrayList<Point> ans = new ArrayList<Point>();
-		double angle = 360./(double)howMany;
-		Vector2d direction = slope.rotate(angle),sum;
+		double angle = 180./(double)howMany;
+		Vector2d direction = slope.rotate(-90),sum;
 		
-		for(int x = 0; x < howMany; x++){
+		for(int x = 0; x <= howMany; x++){
 			direction.normalize();
 			direction.scale(radius);
 			sum = pos.add(direction);
@@ -90,15 +73,20 @@ public class Ball extends Actor {
 		
 	}
 	
-	public void checkBoundary(){
-		if ((int)pos.getX() < radius)
-			spd.setX(Math.abs(spd.getX()));
-		if ((int)pos.getX() + radius > screen.getWidth() )
-			spd.setX(-Math.abs(spd.getX()));
-		if ((int)pos.getY() < radius)
-			spd.setY(Math.abs(spd.getY()));
-		if ((int)pos.getY() + radius > screen.getHeight())
-			spd.setY(-Math.abs(spd.getY())*.95);
+	@Override
+	public void draw(Graphics g) {
+		// TODO Auto-generated method stub
+		g.setColor(color);
+		
+		
+		pos = pos.add(spd);
+		
+		//Limiting the speed of the ball
+		if(spd.getLength() < (double)maxSpeed || spd.getY()<0)
+			spd = spd.add(0,gravity);
+		
+		g.fillOval((int)pos.getX() - radius, (int)pos.getY() - radius, radius * 2, radius * 2);
+
 	}
 
 }

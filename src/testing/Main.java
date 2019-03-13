@@ -10,7 +10,7 @@ public class Main {
 
 	
 	public static void main(String args[]){
-		JFrame frame = new JFrame("Pinball Tester");
+		JFrame frame = new JFrame("Pinball");
 		Dimension size = new Dimension(800,800);
 		FrameManager fm = new FrameManager(size);
 		

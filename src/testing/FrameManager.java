@@ -83,7 +83,7 @@ public class FrameManager extends JPanel implements ActionListener {
 			gameOver = false;
 		}
 		g.setColor(Color.BLACK);
-	}
+	} 
 	
 	private void mainMenu(Graphics g){
 		this.setBackground(Color.WHITE);
@@ -147,31 +147,30 @@ public class FrameManager extends JPanel implements ActionListener {
 		blocks = new ArrayList<Block>();
 		actors = new ArrayList<Actor>();
 		Point p;
+		double middleScreen = screenSize.getWidth() / 2;
 
 		Random rand = new Random();
-		ball = new Ball(275, 250, Color.RED.darker(), 10, rand.nextDouble()*20-10, rand.nextDouble()*20-10, screenSize);
-
-		double middleScreen = screenSize.getWidth() / 2;
-		System.out.println(middleScreen);
+		double randX = rand.nextDouble() < .5 ? middleScreen + (rand.nextDouble() * 30 + 50) :middleScreen - (rand.nextDouble()*30+50);
+		ball = new Ball(randX, 220 + rand.nextDouble() * 20, Color.RED.darker(), 10, rand.nextDouble()*20-10, rand.nextDouble()*20-10);
 
 		//Block( xPos, yPos, color, width, height, angle)
 		Block ceiling = new Block(0, 0, Color.BLACK, 1100, 140, 0,1);
 		Block wallLeft = new Block(0, 0, new Color(0, 127, 0), 150, 1100, 0,1);
 		Block wallRight = new Block(screenSize.getWidth() - 150, 0, new Color(0, 127, 0), 150, 1100, 0,1);
 
-		Block inclineLeft = new Block(125, 400, new Color(0, 127, 0), 250, 60, 40,.8);
+		Block inclineLeft = new Block(125, 400, new Color(0, 127, 0), 250, 60, 40,.9);
 		p = inclineLeft.getCorner(true, true);
-		Block cliffLeft = new Block(p.getX() - 60, p.getY(), new Color(0, 127, 0), 60, 300, 0,.8);
+		Block cliffLeft = new Block(p.getX() - 60, p.getY(), new Color(0, 127, 0), 60, 300, 0,.9);
 		paddleLeft = new Paddle(p.getX() - 10, p.getY(), new Color(127, 127, 0), 80, 30, 20, 1.5, -40, 20, true);
 
 		p = new Point((int) (2 * middleScreen - p.getX()), (int) p.getY());
-		Block inclineRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 250, 60, -40,.8);
-		Block cliffRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 60, 300, 0,.8);
+		Block inclineRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 250, 60, -40,.9);
+		Block cliffRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 60, 300, 0,.9);
 		paddleRight = new Paddle(p.getX() + 10, p.getY(), new Color(127, 127, 0), 30, 80, 70,1.5, 70, 130, false);
 
 		Block b1 = new Block((int) middleScreen - 90, 250, Color.RED, 60, 60, 20,.9);
-		Block b2 = new Block((int) middleScreen + 30, 250, Color.RED, 60, 60, -20,.9);
-		Block b3 = new Block((int) middleScreen, 350, Color.RED, 60, 60, 40,.9);
+		Block b2 = new Block((int) middleScreen + 30, 250, Color.RED, 60, 60, -20,1.9);
+		Block b3 = new Block((int) middleScreen, 350, Color.RED, 60, 60, 45,.7);
 
 		blocks.add(wallLeft);
 		blocks.add(wallRight);
