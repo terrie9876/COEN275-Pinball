@@ -95,10 +95,11 @@ public class Block extends Actor {
 	public void collidedWith(Ball ball){
 		int numPoints = 8;// number of points around the ball to check
 		ArrayList<Point> ptChecks = ball.getPointBySlope(tangentUp.inverse(), numPoints);
-		Vector2d currTan = this.whichSide(new Point((int) ball.getPos().getX(), (int) ball.getPos().getY()));
+		
 
 		for (Point p : ptChecks) {
 			if (isInRectangle(p)) {
+				Vector2d currTan = this.whichSide(new Point((int) ball.getPos().getX(), (int) ball.getPos().getY()));
 				ball.alterSpeed(currTan,bounceFactor);
 				return;
 			}

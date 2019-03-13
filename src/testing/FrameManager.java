@@ -169,8 +169,8 @@ public class FrameManager extends JPanel implements ActionListener {
 		paddleRight = new Paddle(p.getX() + 10, p.getY(), new Color(127, 127, 0), 30, 80, 70,1.5, 70, 130, false);
 
 		Block b1 = new Block((int) middleScreen - 90, 250, Color.RED, 60, 60, 20,.9);
-		Block b2 = new Block((int) middleScreen + 30, 250, Color.RED, 60, 60, -20,1.9);
-		Block b3 = new Block((int) middleScreen, 350, Color.RED, 60, 60, 45,.7);
+		Block b2 = new Block((int) 2*middleScreen - b1.getCorner(true, false).getX(), 250, Color.RED, 60, 60, -20,1.9);
+		Block b3 = new Block((int) middleScreen, 350, Color.RED, 60, 60, 45,.9);
 
 		blocks.add(wallLeft);
 		blocks.add(wallRight);
