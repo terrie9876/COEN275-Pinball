@@ -7,13 +7,11 @@ public class KeyManager extends KeyAdapter implements KeyListener{
 	private boolean rPaddle, lPaddle, gStart;
 	
 	public KeyManager(){
-		System.out.println("Key manager made");
 		lPaddle = true;
 		rPaddle = false;
 	}
 	
 	public void keyPressed(KeyEvent e){
-		System.out.println("Key Pressed");
 		if(e.getKeyCode() == KeyEvent.VK_LEFT){
 			lPaddle = false;
 		}
@@ -27,7 +25,6 @@ public class KeyManager extends KeyAdapter implements KeyListener{
 	}
 	
 	public void keyReleased(KeyEvent e){
-		System.out.println("Key Released");
 		if(e.getKeyCode() == KeyEvent.VK_LEFT){
 			lPaddle = true;
 		}

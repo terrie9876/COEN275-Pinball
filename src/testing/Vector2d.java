@@ -93,8 +93,7 @@ public class Vector2d {
 
 		Vector2d temp = (Vector2d) obj;
 
-		// we have to account to the hardware limitations of calulating sin and
-		// cosine
+		//Small margin of error to account for imprecision of calculating sine and cosine
 		return (Math.abs(this.x - temp.x) < 1e-8) && (Math.abs(this.y - temp.y) < 1e-8);
 	}
 

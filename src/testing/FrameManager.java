@@ -52,6 +52,7 @@ public class FrameManager extends JPanel implements ActionListener {
 	
 	private void checkCollision() {
 		ArrayList<Thread> tList = new ArrayList<Thread>();
+		//Makes and start collision checking thread for each block
 		for (Block b : blocks) {
 			CollisionRunnable cr = new CollisionRunnable(b, ball);
 			Thread t = new Thread(cr);
@@ -59,6 +60,7 @@ public class FrameManager extends JPanel implements ActionListener {
 			t.start();
 		}
 
+		//wait for all threads to finish
 		for (Thread t : tList) {
 			try {
 				t.join();
@@ -161,12 +163,12 @@ public class FrameManager extends JPanel implements ActionListener {
 		Block inclineLeft = new Block(125, 400, new Color(0, 127, 0), 250, 60, 40,.9);
 		p = inclineLeft.getCorner(true, true);
 		Block cliffLeft = new Block(p.getX() - 60, p.getY(), new Color(0, 127, 0), 60, 300, 0,.9);
-		paddleLeft = new Paddle(p.getX() - 10, p.getY(), new Color(127, 127, 0), 80, 30, 20, 1.5, -40, 20, true);
+		paddleLeft = new Paddle(p.getX() - 10, p.getY(), new Color(127, 127, 0), 80, 30, 20, 1.5, -40, 20);
 
 		p = new Point((int) (2 * middleScreen - p.getX()), (int) p.getY());
 		Block inclineRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 250, 60, -40,.9);
 		Block cliffRight = new Block(p.getX(), p.getY(), new Color(0, 127, 0), 60, 300, 0,.9);
-		paddleRight = new Paddle(p.getX() + 10, p.getY(), new Color(127, 127, 0), 30, 80, 70,1.5, 70, 130, false);
+		paddleRight = new Paddle(p.getX() + 10, p.getY(), new Color(127, 127, 0), 30, 80, 70,1.5, 70, 130);
 
 		Block b1 = new Block((int) middleScreen - 90, 250, Color.RED, 60, 60, 20,.9);
 		Block b2 = new Block((int) 2*middleScreen - b1.getCorner(true, false).getX(), 250, Color.RED, 60, 60, -20,1.9);

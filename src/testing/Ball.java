@@ -18,9 +18,8 @@ public class Ball extends Actor {
 		
 	}
 
-	//Function: getPointBySlope(Vector2d,howMany)
-	//Purpose: Returns an ArrayList of Points that are on the edge of the ball. The first point will always be in the direction of slope
-	//Note: I used slope so that the first point in the list will always be the one closest to the block that calls this function
+	//Function: getPointBySlope(Vector2d,int)
+	//Purpose: Returns an ArrayList of howMany number of Points on the edge of the Ball, where the middle value of the ArrayList is in the direction of the given slope
 	public ArrayList<Point> getPointBySlope(Vector2d slope, int howMany){
 		ArrayList<Point> ans = new ArrayList<Point>();
 		double angle = 180./(double)howMany;
@@ -63,13 +62,11 @@ public class Ball extends Actor {
 		tangent.scale(scaleFactor);
 		Vector2d newSpd = (tangent.subtract(spd)).inverse();
 		newSpd.normalize();
-		//System.out.println("Old Spd: "+spd.toString() + " New Spd: "+newSpd.toString() + " Tangent: " + tangent.toString());
 		
 		newSpd.scale(spdValue);
 		spd = newSpd;
 		
 		score++;
-		System.out.println(score);
 		
 	}
 	
